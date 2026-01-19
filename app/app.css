@@ -1,0 +1,16 @@
+/*  This marks the start of the document */
+
+body {
+    background: rgb(6, 70, 95);
+    min-height: max-content;
+    overflow: hidden;
+}
+
+body p {
+    color: white;
+}
+
+
+
+
+
