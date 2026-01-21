@@ -22,7 +22,7 @@ parent.appendChild(paragraph);
 
 createBars(arr);
 
-document.addEventListener('DOMContentLoaded', mergeSort(arr));
+document.addEventListener('DOMContentLoaded', callQuickSort(arr));
 
 // const test = document.getElementById(4);
 // const test2 = document.getElementById(2)
@@ -129,51 +129,49 @@ function selectionSort(arr) {
 }
 
 
-// function mergeSort(arr) {
-//   if (arr.length <= 1) return arr;
+function callQuickSort(arr) {
+    let globalCount = 0
+    function quickSort(arr, left = 0, right = arr.length - 1, globalCount) {
+        if (left >= right) return arr;
 
-//   const mid = Math.floor(arr.length / 2);
-//   const left = mergeSort(arr.slice(0, mid));
-//   const right = mergeSort(arr.slice(mid));
+        const pivotIndex = partition(arr, left, right);
+        quickSort(arr, left, pivotIndex - 1);
+        quickSort(arr, pivotIndex + 1, right);
 
-//   mergedArr = merge(left, right)
-//   console.log(mergedArr);
+    }
 
-//   return mergedArr;
-// }
+    function partition(arr, left, right) {
+        const pivot = arr[right];
+        let i = left;
 
-// function merge(left, right) {
-//   let result = [];
-//   let i = 0, j = 0;
+        for (let j = left; j < right; j++) {
+            if (arr[j] < pivot) {
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+            i++;
+            }
+            console.log(arr);
+        }
+        [arr[i], arr[right]] = [arr[right], arr[i]];
+        setTimeout(displaySnapshot, globalCount, [...arr], pivot);
+        globalCount += 100;
 
-//   while (i < left.length && j < right.length) {
-//     if (left[i] <= right[j]) {
-//       result.push(left[i++]);
-//     } else {
-//       result.push(right[j++]);
-//     }
-//   }
-//   for (let idx = 0; idx < result.length; idx++) {
-//         const bar = document.getElementById(idx);
+        return i;
+    }
 
-//         const height = result[idx];
-//         // setTimeout(() => {
-//             // }, idx * 50);
-//         setTimeout(() => {
-//             bar.style.height = `${height}px`;
-//         }, counter);
-//         counter += 50;
-//     }
-
-//   return result.concat(left.slice(i)).concat(right.slice(j));
-// }
+    quickSort(arr)
+    setTimeout(finishAnimation, globalCount, arr);
+}
 
 
-//Iterative Merge Sort
-// JavaScript program to perform
-// iterative merge sort.
 
-// Helper function to merge two sorted portions of the array
+function getGlobalCounter() {
+    return gCounter;
+}
+
+function setGlobalCounter(x) {
+    const gCounter = x;
+}
+
 
 function merge(arr, left, mid, right, counter) {
     let arr1 = arr.slice(left, mid + 1);
@@ -213,7 +211,7 @@ function mergeSort(arr) {
             let mid = Math.min(leftStart + currSize - 1, n - 1);
             let rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
             merge(arr, leftStart, mid, rightEnd, counter);
-            setTimeout(displaySnapshot, counter, [...arr]);
+            setTimeout(displaySnapshot, counter, [...arr], counter);
             counter += 100;
         }
     }
@@ -223,19 +221,41 @@ function mergeSort(arr) {
 
 
 
-function displaySnapshot (arr) {
+async function displaySnapshot (arr) {
+    let count = 0 
     for (let idx = 0; idx < arr.length; idx++) {
-    const bar = document.getElementById(idx);
-    
-    const height = arr[idx];
-    // setTimeout(() => {
-        // }, idx * 50);
+        const bar = document.getElementById(idx);
+        bar.style.backgroundColor = 'red';
+        
+        const height = arr[idx];
         bar.style.height = `${height}px`;
+        
+        // setTimeout(() => {
+        //     bar.style.backgroundColor = 'white';
+        // }, count);
+        // count += 10;
     }
-    console.log(arr);
 }
 
+async function displaySnapshot (arr, pivot) {
+    let count = 0 
+    for (let idx = 0; idx < pivot; idx++) {
+        const bar = document.getElementById(idx);
+        
+        const height = arr[idx];
+        bar.style.height = `${height}px`;
 
+        
+        // setTimeout(() => {
+        //     bar.style.backgroundColor = 'red';
+        // }, count);
+        // count += 50;
+        // setTimeout(() => {
+        //     bar.style.backgroundColor = 'white';
+        // }, count);
+        // count += 10;
+    }
+}
 
 
 
@@ -251,6 +271,14 @@ function displaySnapshot (arr) {
 
 
 // Lets see if i can do in place swapping
+
+function resetArr(arr, pivot) {
+    for (let idx = 0; idx < arr.length; idx++) {
+        const bar = document.getElementById(idx);
+        bar.style.backgroundColor = 'white';
+    }
+}
+
 
 function swapElements(a, b){
     // Query the ID of J and j+1
