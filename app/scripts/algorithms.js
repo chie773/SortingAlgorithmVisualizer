@@ -1,5 +1,5 @@
-// Quick Sort
 
+// Quick Sort
 function mergeSort(arr) {
   if (arr.length <= 1) return arr;
 
@@ -94,8 +94,19 @@ function heapify(arr, size, root) {
 }
 
 
-// Insertion Sort
+function bubbleSort(arr) { 
+    for (let i = 0; i < arr.length - 1 ; i++) {
+        for (let j = i+1; j < arr.length; j++) {
+            if (arr[j] < arr[i]) {
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp; 
+            }
+        }
+    }
+}
 
+// Insertion Sort
 function insertionSort(arr) {
   for (let i = 1; i < arr.length; i++) {
     let key = arr[i];
@@ -143,7 +154,8 @@ module.exports = {
     quickSort,
     insertionSort,
     heapSort,
-    shellSort
+    shellSort,
+    bubbleSort
 }
 
 
