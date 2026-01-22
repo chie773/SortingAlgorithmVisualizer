@@ -10,7 +10,52 @@ body p {
     color: white;
 }
 
+body div{
+    color: white;
+}
 
 
 
 
+
+
+hr {
+    display: block;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    color: gray;
+    unicode-bidi: isolate;
+    overflow: hidden;
+}
+
+.line {
+    width: 100%;
+    border: none;
+    border-top: 1px solid white;
+    margin: 1vh 0;
+}
+
+.visualizer {
+    width: 100%;
+    margin: 2vh 0;
+    background-Color: black;
+
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    background-Color: rgba(4, 45, 61, 0.342);  
+
+    height: 3vh;
+}
+
+.buttons button {
+    gap: 5vw;
+    height: 80%;
+    width: 50vw;
+    font-style: italic;
+
+}

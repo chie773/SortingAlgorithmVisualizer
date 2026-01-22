@@ -1,19 +1,10 @@
-const words = document.querySelector('body');
-
-words.innerHTML = `Can you work please?`;
-words.style.color = 'white';
 arr = [112, 27, 162, 72, 147, 12, 187, 97, 32, 177,
  202, 67, 127, 47, 182, 82, 157, 22, 137, 52,
  192, 107, 172, 62, 207, 92, 117, 37, 167, 152,
  142, 77, 57, 197, 122, 42, 87, 132, 17, 102];
 
-const parent = document.querySelector('body');
-const paragraph = document.createElement('p');
-    
-paragraph.id = 'paragraph';
-paragraph.innerText = 'hi';
+const parent = document.querySelector('.visualizer');
 
-parent.appendChild(paragraph);
 
 
 
@@ -22,7 +13,7 @@ parent.appendChild(paragraph);
 
 createBars(arr);
 
-document.addEventListener('DOMContentLoaded', callQuickSort(arr));
+document.addEventListener('DOMContentLoaded', insertionSort(arr));
 
 // const test = document.getElementById(4);
 // const test2 = document.getElementById(2)
@@ -162,15 +153,6 @@ function callQuickSort(arr) {
     setTimeout(finishAnimation, globalCount, arr);
 }
 
-
-
-function getGlobalCounter() {
-    return gCounter;
-}
-
-function setGlobalCounter(x) {
-    const gCounter = x;
-}
 
 
 function merge(arr, left, mid, right, counter) {
