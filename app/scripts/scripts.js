@@ -6,14 +6,43 @@ arr = [112, 27, 162, 72, 147, 12, 187, 97, 32, 177,
 const parent = document.querySelector('.visualizer');
 
 
-
-
 // Gotta create the algorithms in this document, noice
 
 
 createBars(arr);
 
-document.addEventListener('DOMContentLoaded', insertionSort(arr));
+
+
+const button1 = document.getElementById('insertionSort');
+const button2 = document.getElementById('selectionSort');
+const button3 = document.getElementById('mergeSort');
+const button4 = document.getElementById('quickSort');
+
+button1.addEventListener('click', () =>{
+    displayArr(arr);
+    callInsertionSort(arr);
+});
+
+button2.addEventListener('click', () =>{
+    displayArr(arr);
+    callSelectionSort(arr);
+});
+
+button3.addEventListener('click', () =>{
+    displayArr(arr);
+    callMergeSort(arr);
+});
+
+button4.addEventListener('click', () =>{
+    displayArr(arr);
+    callQuickSort(arr);
+});
+
+
+
+
+
+
 
 // const test = document.getElementById(4);
 // const test2 = document.getElementById(2)
@@ -47,80 +76,96 @@ function createBars(arr){
     parent.appendChild(bars);
 }
 
+async function displayArr(arr) {
+    for (let idx = 0; idx < arr.length; idx++) {
+        const bar = document.getElementById(idx);
+        
+        const height = arr[idx];
+        bar.style.height = `${height}px`;
+    }
+}
+
 // Edit algorithm to highlight current swapped bar position
 
 // Create swap function that swaps the bar elements in place 
 // --- Use setTimeout to delay it slighty and AWAIT the timeout so the algorithm doesn't continue until its displayed
 
 // Figure out the rest later
-
-function insertionSort(arr) {
-    // const parent = document.querySelector('body');
-    // const paragraph = document.createElement('p');
-    // paragraph.id = 'paragraph';
-    // paragraph.innerText = 'hi';
+function callInsertionSort(arr) {
     
-    count = 100;
-    for (let i = 1; i < arr.length; i++) {
-        let copy = arr;
-        setTimeout(setCurrBar, count, i);
-        count += 100;
+    setTitleAndDescription('Insertion Sort');
 
-        let key = arr[i];
-        let j = i - 1;
+    function insertionSort(arr) {
+        count = 100;
+        let copy = [...arr];
+        for (let i = 1; i < copy.length; i++) {
+            setTimeout(setCurrBar, count, i);
+            count += 30;
+            
+            let key = arr[i];
+            let j = i - 1;
+            
+            while (j >= 0 && copy[j] > key) {
+                setTimeout(swapElements, count, j+1, j);
+                count += 30;
+                copy[j + 1] = copy[j];
+                j--;
+            }
+            
+            
+            copy[j + 1] = key;
+            let idx = j + 1;
+            const bar = document.getElementById(idx);
+            setTimeout(() => {
+                bar.style.height = `${key.toString()}px`;
+            }, count);
+            count += 30;
         
-        while (j >= 0 && arr[j] > key) {
-            setTimeout(swapElements, count, j+1, j);
-            count += 100;
-            arr[j + 1] = arr[j];
-            j--;
+            setTimeout(resetCurrBar, count, j+1);
+            count += 30;       
         }
-
-        
-        arr[j + 1] = key;
-        let idx = j + 1;
-        const bar = document.getElementById(idx);
-        setTimeout(() => {
-            bar.style.height = `${key.toString()}px`;
-        }, count);
-        count += 100;
-
-        setTimeout(resetCurrBar, count, j+1);
-        count += 100;       
+    
+        setTimeout(finishAnimation, count, copy);
     }
-
-    setTimeout(finishAnimation, count, arr);
+    insertionSort(arr);
 }
 
+function callSelectionSort(arr) {
+    setTitleAndDescription('Selection Sort');
 
-function selectionSort(arr) { 
-    count = 100;
-    for (let i = 0; i < arr.length - 1 ; i++) {
-        for (let j = i; j < arr.length; j++) {
-            setTimeout(setCurrBar, count, j);
-            count += 20;
-            if (arr[j] < arr[i]) {
-                
-                setTimeout(swapElements, count, i, j);
+    function selectionSort(arr) { 
+        count = 100;
+        for (let i = 0; i < arr.length - 1 ; i++) {
+            for (let j = i; j < arr.length; j++) {
+                setTimeout(setCurrBar, count, j);
                 count += 20;
-                temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp; 
-                setTimeout(resetCurrBar, count, j);
-                count += 20;
-            } else {
-                setTimeout(resetCurrBar, count, j);
-                count += 20;
+                if (arr[j] < arr[i]) {
+                    
+                    setTimeout(swapElements, count, i, j);
+                    count += 20;
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp; 
+                    setTimeout(resetCurrBar, count, j);
+                    count += 20;
+                } else {
+                    setTimeout(resetCurrBar, count, j);
+                    count += 20;
+                }
             }
+            setTimeout(resetCurrBar, count, i);
+            count += 20;
         }
-        setTimeout(resetCurrBar, count, i);
-        count += 20;
+        setTimeout(finishAnimation, count, arr);
     }
-    setTimeout(finishAnimation, count, arr);
+
+    selectionSort([...arr]);
 }
 
 
 function callQuickSort(arr) {
+    setTitleAndDescription('Quick Sort');
+
     let globalCount = 0
     function quickSort(arr, left = 0, right = arr.length - 1, globalCount) {
         if (left >= right) return arr;
@@ -144,61 +189,66 @@ function callQuickSort(arr) {
         }
         [arr[i], arr[right]] = [arr[right], arr[i]];
         setTimeout(displaySnapshot, globalCount, [...arr], pivot);
-        globalCount += 100;
+        globalCount += 50;
 
         return i;
     }
 
-    quickSort(arr)
+    quickSort([...arr]);
     setTimeout(finishAnimation, globalCount, arr);
 }
 
 
-
-function merge(arr, left, mid, right, counter) {
-    let arr1 = arr.slice(left, mid + 1);
-    let arr2 = arr.slice(mid + 1, right + 1);
+function callMergeSort(arr) {
+    setTitleAndDescription('Merge Sort');
     
-    let i = 0, j = 0, k = left;
-    
-    while (i < arr1.length && j < arr2.length) {
-        arr[k++] = arr1[i] <= arr2[j] ? arr1[i++] : arr2[j++];
-    }
-    
-    while (i < arr1.length) arr[k++] = arr1[i++];
-    while (j < arr2.length) arr[k++] = arr2[j++];
-
-    setTimeout(() => {
-        for (let idx = 0; idx < arr.length; idx++) {
-        const bar = document.getElementById(idx);
-
-        const height = arr[idx];
-        // setTimeout(() => {
-            // }, idx * 50);
-        bar.style.height = `${height}px`;
+    function merge(arr, left, mid, right, counter) {
+        let arr1 = arr.slice(left, mid + 1);
+        let arr2 = arr.slice(mid + 1, right + 1);
+        
+        let i = 0, j = 0, k = left;
+        
+        while (i < arr1.length && j < arr2.length) {
+            arr[k++] = arr1[i] <= arr2[j] ? arr1[i++] : arr2[j++];
         }
-    }, counter);
-    counter += 100;
+        
+        while (i < arr1.length) arr[k++] = arr1[i++];
+        while (j < arr2.length) arr[k++] = arr2[j++];
 
-    return counter;
-}
+        setTimeout(() => {
+            for (let idx = 0; idx < arr.length; idx++) {
+            const bar = document.getElementById(idx);
 
-// Main sorting function
-function mergeSort(arr) {
-    let n = arr.length;
-    let counter = 0;
+            const height = arr[idx];
+            // setTimeout(() => {
+                // }, idx * 50);
+            bar.style.height = `${height}px`;
+            }
+        }, counter);
+        counter += 50;
 
-    for (let currSize = 1; currSize <= n - 1; currSize *= 2) {
-        for (let leftStart = 0; leftStart < n - 1; leftStart += 2 * currSize) {
-            let mid = Math.min(leftStart + currSize - 1, n - 1);
-            let rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
-            merge(arr, leftStart, mid, rightEnd, counter);
-            setTimeout(displaySnapshot, counter, [...arr], counter);
-            counter += 100;
-        }
+        return counter;
     }
 
-    setTimeout(finishAnimation, counter, arr);
+    // Main sorting function
+    function mergeSort(arr) {
+        let n = arr.length;
+        let counter = 0;
+
+        for (let currSize = 1; currSize <= n - 1; currSize *= 2) {
+            for (let leftStart = 0; leftStart < n - 1; leftStart += 2 * currSize) {
+                let mid = Math.min(leftStart + currSize - 1, n - 1);
+                let rightEnd = Math.min(leftStart + 2 * currSize - 1, n - 1);
+                merge(arr, leftStart, mid, rightEnd, counter);
+                setTimeout(displaySnapshot, counter, [...arr], counter);
+                counter += 50;
+            }
+        }
+
+        setTimeout(finishAnimation, counter, arr);
+    }
+
+    mergeSort([...arr]);
 }
 
 
@@ -211,11 +261,6 @@ async function displaySnapshot (arr) {
         
         const height = arr[idx];
         bar.style.height = `${height}px`;
-        
-        // setTimeout(() => {
-        //     bar.style.backgroundColor = 'white';
-        // }, count);
-        // count += 10;
     }
 }
 
@@ -226,31 +271,8 @@ async function displaySnapshot (arr, pivot) {
         
         const height = arr[idx];
         bar.style.height = `${height}px`;
-
-        
-        // setTimeout(() => {
-        //     bar.style.backgroundColor = 'red';
-        // }, count);
-        // count += 50;
-        // setTimeout(() => {
-        //     bar.style.backgroundColor = 'white';
-        // }, count);
-        // count += 10;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Lets see if i can do in place swapping
 
@@ -317,14 +339,32 @@ function finishAnimation(arr) {
 }
 
 
+function setTitleAndDescription(x) {
+    const title = document.querySelector('h2');
+    title.innerHTML = x;
 
+    const description = document.querySelector('.sorting-algorithm-description');
+    switch (x) {
+        case "Insertion Sort":
+            description.innerHTML = 'Insertion Sort builds a sorted list one element at a time by inserting each new element into its correct position among previously sorted elements. It is easy to understand and efficient for small or nearly sorted datasets, but it becomes slow on large inputs due to its quadratic time complexity.';
+            break;
+        
+        case "Selection Sort":
+            description.innerHTML = 'Selection Sort works by repeatedly finding the smallest (or largest) element in the unsorted portion of the array and swapping it with the first unsorted position. Its behavior is simple and consistent, always performing the same number of comparisons regardless of input order. However, it is inefficient for large datasets and is mainly used for educational purposes.';
+            break;
+        
+        case "Merge Sort":
+            description.innerHTML = 'Merge Sort uses a divide-and-conquer approach by splitting the array into smaller subarrays, sorting them, and then merging them back together. It guarantees a time complexity of O(n log n), making it efficient for large datasets. The trade-off is that it requires additional memory for merging.';
+            break;
 
-
-
-
-
-
-
+        case "Quick Sort":
+            description.innerHTML = 'Quick Sort also follows a divide-and-conquer strategy by selecting a pivot element and partitioning the array around it. On average, it runs very fast with O(n log n) time complexity and is widely used in practice. In the worst case, however, its performance degrades to O(n²) if poor pivot choices are made.';
+            break;
+        
+        default:
+            break;
+        }   
+}
 
 
 
